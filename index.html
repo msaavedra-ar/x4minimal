@@ -1,1 +1,67 @@
-<!doctype html><html lang="es"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>X4 Minimal</title><style>body{font-family:Georgia,serif;background:#eee;color:#111;margin:0}.app{max-width:420px;min-height:100vh;background:#fafaf7;margin:auto;padding:25px;box-sizing:border-box}header{display:flex;justify-content:space-between;font:12px sans-serif;margin-bottom:55px}h1{font-weight:normal}button{background:white;border:1px solid #555;padding:16px;width:100%;margin:8px 0;text-align:left;font:inherit}.hide{display:none}small{color:#666}textarea{width:100%;box-sizing:border-box;padding:12px;font:16px sans-serif}.bubble{border:1px solid #aaa;padding:12px;margin:10px 0}nav{margin-top:35px;border-top:1px solid #aaa;padding-top:12px}nav button{width:48%;text-align:center}</style><div class="app"><header><b>X4 MINIMAL</b><span>Wi-Fi ◉</span></header><section id="home"><small>LECTURA PRIMERO</small><h1>Biblioteca</h1><button onclick="show('read')">📖 El Camino de los Reyes<br><small>Continuar lectura · Ejemplo</small></button><button onclick="show('chats')">Mensajes<br><small>Sincronización cada 15 minutos (simulada)</small></button></section><section id="read" class="hide"><h1>Lectura</h1><p>Un espacio tranquilo para leer. Los mensajes pueden esperar.</p><small>Texto demostrativo, no pertenece a ningún libro.</small></section><section id="chats" class="hide"><h1>Mensajes</h1><small>Datos ficticios · Sin conexión real a WhatsApp</small><div id="list"></div><button onclick="sync()">Sincronizar ahora</button><p id="status"><small>Modo demostración</small></p></section><section id="chat" class="hide"><h1 id="person"></h1><div id="messages"></div><textarea id="input" placeholder="Escribir mensaje..."></textarea><button onclick="send()">Enviar mensaje de prueba</button></section><nav><button onclick="show('home')">Biblioteca</button> <button onclick="show('chats')">Mensajes</button></nav><small>X4 Minimal v0.1 · Prototipo web</small></div><script>const data=[{name:'Alex',msgs:['¿Nos vemos mañana?']},{name:'Equipo',msgs:['¡Buen día!']},{name:'Familia',msgs:['Avisame cuando llegues.']}];let current=0;function show(id){document.querySelectorAll('section').forEach(x=>x.classList.add('hide'));document.getElementById(id).classList.remove('hide');if(id==='chats')list();if(id==='chat')thread()}function list(){const el=document.getElementById('list');el.innerHTML='';data.forEach((c,i)=>{const b=document.createElement('button');b.textContent=c.name+' · '+c.msgs.at(-1);b.onclick=()=>{current=i;show('chat')};el.appendChild(b)})}function thread(){document.getElementById('person').textContent=data[current].name;const el=document.getElementById('messages');el.innerHTML='';data[current].msgs.forEach(m=>{let d=document.createElement('div');d.className='bubble';d.textContent=m;el.appendChild(d)})}function send(){const e=document.getElementById('input');if(!e.value.trim())return;data[current].msgs.push('Yo: '+e.value.trim());e.value='';thread()}function sync(){document.getElementById('status').textContent='Sincronización simulada completada. No se consultó WhatsApp.'}list()</script></html>
+<!doctype html>
+<html lang="es-AR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>X4 Minimal</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#main">Ir al contenido</a>
+  <div class="app">
+    <header class="masthead"><span class="wordmark">x4<span aria-hidden="true"> / </span>minimal</span><span class="edition">LECTURA & CALMA</span></header>
+    <main id="main">
+      <section id="home" aria-labelledby="home-title">
+        <p class="eyebrow">UN MOMENTO PARA VOS</p>
+        <h1 id="home-title" tabindex="-1">Biblioteca</h1>
+        <p class="intro">Menos ruido.<br>Más espacio para leer.</p>
+        <p class="eyebrow rule">TU LECTURA</p>
+        <button id="open-book" class="book">
+          <span class="book-number" aria-hidden="true">01</span>
+          <span><span class="book-title">El arte de hacer una pausa</span><span class="detail">Texto original de demostración</span><span class="detail" id="book-progress">Empezar · 3 páginas</span></span>
+          <span aria-hidden="true">→</span>
+        </button>
+        <p class="quiet">Una lectura breve. Sin apuro.</p>
+        <aside class="note"><p>Este es tu espacio de lectura.</p><p>Los mensajes pueden esperar.</p></aside>
+      </section>
+
+      <section id="read" hidden aria-labelledby="read-title">
+        <button class="back" data-view="home">← Biblioteca</button>
+        <div class="reader-tools"><span class="eyebrow">TEXTO DEMO</span><div role="group" aria-label="Tamaño del texto"><button id="smaller" aria-label="Reducir texto">A−</button><button id="larger" aria-label="Aumentar texto">A+</button></div></div>
+        <h1 id="read-title" class="reader-title" tabindex="-1">El arte de hacer una pausa</h1>
+        <article id="reading" aria-label="Página de lectura"></article>
+        <div class="pagination"><button id="previous" aria-label="Página anterior">← Anterior</button><span id="page-number" role="status"></span><button id="next" aria-label="Página siguiente">Siguiente →</button></div>
+        <p class="quiet">Texto original de muestra · No es un libro importado.</p>
+      </section>
+
+      <section id="chats" hidden aria-labelledby="chats-title">
+        <p class="eyebrow">UN ESPACIO SECUNDARIO</p>
+        <h1 id="chats-title" tabindex="-1">Mensajes</h1>
+        <p class="demo-label">DEMOSTRACIÓN</p>
+        <p class="description">Conversaciones ficticias.<br>Sin conexión real a WhatsApp.</p>
+        <div id="list" class="conversation-list"></div>
+        <div class="sync-panel"><p class="eyebrow">SINCRONIZACIÓN SIMULADA</p><p>Intervalo propuesto: 15 minutos.</p><p class="detail">Sin programación ni actividad en segundo plano.</p><button id="sync">Simular sincronización</button><p id="sync-status" role="status">Todavía no simulaste una sincronización.</p></div>
+      </section>
+
+      <section id="chat" hidden aria-labelledby="person">
+        <button class="back" data-view="chats">← Conversaciones</button>
+        <h1 id="person" tabindex="-1"></h1>
+        <p class="demo-label">CONVERSACIÓN FICTICIA</p>
+        <ol id="messages" aria-label="Historial de prueba"></ol>
+        <form id="compose">
+          <label for="input">Tu mensaje de prueba</label>
+          <textarea id="input" rows="3" maxlength="500" aria-describedby="compose-help count" placeholder="Escribí sin apuro…"></textarea>
+          <div class="compose-meta"><span id="compose-help">Solo en esta sesión. No se envía.</span><span id="count">0 / 500</span></div>
+          <button id="send" class="primary" type="submit" disabled>Agregar mensaje de prueba ↑</button>
+          <p id="send-status" role="status"></p>
+        </form>
+      </section>
+      <noscript><p>Activá JavaScript para abrir la lectura y las conversaciones simuladas.</p></noscript>
+    </main>
+    <nav aria-label="Navegación principal"><button data-view="home" aria-current="page">Biblioteca</button><button data-view="chats">Mensajes <span class="nav-demo">demo</span></button></nav>
+    <footer><span>X4 MINIMAL / v0.2</span><span>Prototipo web</span><p id="connection" role="status"></p></footer>
+  </div>
+</body>
+</html>
